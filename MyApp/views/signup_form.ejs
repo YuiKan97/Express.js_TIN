@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= title %></title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+  	<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900|Quicksand:400,700" rel="stylesheet" />
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+</head>
+<style type="text/css">
+	
+	input[type=text], input[type=password], input[type=email], input[type=number], label {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    align: center;
+}
+
+button {
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 50%;
+}
+
+.sign-up-form{
+	width: 50%;
+	margin: auto;
+}
+
+.field-wrapper {
+    padding: 16px;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.material-icons.md-48.md-light { font-size: 48px; color: rgba(0, 0, 0, 0.26);}
+.material-icons.md-36.md-white { font-size: 36px; color: #ffffff; };
+
+</style>
+<body>
+	<div id="header-wrapper" style="background: url(images/header.jpg)">
+  		<div id="header" class="container">
+  			<div id="logo">
+      			<h1><a href="/">Manager-Online</a></h1>
+      			<div id="menu">
+			        <ul>
+			          <li><a href="/">Homepage</a></li>
+			          <li><a href="/login_window">LogIn</a></li>
+			          <li><a href="/dashboard">Dashboard</a></li>
+			        </ul>
+      			</div>
+      		</div>
+  		</div>
+  	</div>
+
+  	<div id="page-wrapper">	
+  			<div class="sign-up-form">
+   
+          				<h1>Sign Up</h1>
+          
+          					<form>
+          
+	          					<div class="field-wrapper">
+	            						
+	            						<i class="material-icons md-48 md-light">account_circle</i>
+	              						<label>
+	                					First Name<span class="req">*</span>
+	              						</label>
+	              						<input id="firstname" name="firstname" type="text" required autocomplete="off" />
+	        
+	            					
+							            <label>
+							            Surname<span class="req">*</span>
+							            </label>
+	              						<input id="surname" name="surname" type="text"required autocomplete="off"/>
+	            					
+	          					
+							            <label>
+							              Email Address<span class="req">*</span>
+							            </label>
+		            					<input id="email" name="email" type="email"required autocomplete="off"/>
+	          					
+		          					
+							            <label>
+							              Set A Password<span class="req">*</span>
+							            </label>
+							            <input id="password" name="password" type="password"required autocomplete="off"/>
+	          					
+	          
+	          							<input id="sub" type="button" value="Submit" class="button button-block" onclick="send()"/>
+	          					</div>
+	          					
+	          					 <br/>
+                                        <p id="result"></p>
+          					</form>
+  			</div>
+  	</div>
+  	<div id="pageFooter" class="container">
+  	<p>&copy; Untitled. | Lorus iptem | Rutrum fermentum 2017.</p>
+    <ul class="contact">
+      <li><a href="#"><i class="material-icons md-36 md-white">mail</i></a></li>
+	      <li><a href="#"><i class="material-icons md-36 md-white">phone</i></a></li>
+	      <li><a href="#"><i class="material-icons md-36 md-white">location_on</i></a></li>
+    </ul>
+</div>
+</body>
+
+<script type="text/javascript">
+      
+
+    function send() {
+       
+        var e_mail_reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        
+        if(document.getElementById("firstname").value == "" || document.getElementById("surname").value == "" || document.getElementById("email").value == ""|| document.getElementById("password").value == ""){
+            document.getElementById("result").innerHTML = "fields cannot be empty"
+        }else if(!document.getElementById("email").value.match(e_mail_reg)){
+            document.getElementById("result").innerHTML = "wrong e-mail"
+        }else{
+            var json = {
+                firstname: document.getElementById("firstname").value,
+                surname: document.getElementById("surname").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            };
+            var answer = {};
+            var http_request = new XMLHttpRequest();
+        
+            http_request.open("POST", "/signup_form");
+            http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            http_request.onload = function() {
+       
+                if (http_request.readyState == 4 && http_request.status == 200) {
+                    answer = JSON.parse(http_request.responseText);
+                    document.getElementById("result").innerHTML = answer.result;
+                    }
+            };
+            
+            http_request.send(JSON.stringify(json));
+            
+            document.getElementById("firstname").value = "";
+            document.getElementById("surname").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("password").value = "";
+            
+        }
+    }
+      
+  </script>
+</html>

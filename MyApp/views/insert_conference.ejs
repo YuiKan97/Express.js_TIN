@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Manage Conferences</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+  	<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900|Quicksand:400,700" rel="stylesheet" />
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+</head>
+<style type="text/css">
+	
+	input[type=text], input[type=password], input[type=email], input[type=number], label {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    align: center;
+}
+
+/* Set a style for all buttons */
+button {
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 50%;
+}
+
+.sign-up-form{
+	width: 50%;
+	margin: auto;
+}
+
+.field-wrapper {
+    padding: 16px;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.material-icons.md-48.md-light { font-size: 48px; color: rgba(0, 0, 0, 0.26);}
+.material-icons.md-36.md-white { font-size: 36px; color: #ffffff; };
+
+</style>
+<body>
+	<div id="header-wrapper" style="background: url(../images/header.jpg)">
+  		<div id="header" class="container">
+  			<div id="logo">
+      			<h1><a href="/">Manager-Online</a></h1>
+      			<div id="menu">
+			        <ul>
+			          <li>
+			          <a href="/">Homepage</a></li>
+			          <li><a href="/admin_login">LogIn</a></li>
+			          <li><a href="/admin_area">Admin Area</a></li>
+			        </ul>
+      			</div>
+      		</div>
+  		</div>
+  	</div>
+
+  	<div id="page-wrapper">	
+  			<div class="sign-up-form">
+   
+          				<h1>Insert a New Conference</h1>
+          
+          					<form  enctype="multipart/form-data">
+          
+	          					<div class="field-wrapper">
+	            						
+	              						<label>
+	                					Title<span class="req">*</span>
+	              						</label>
+	              						<input id="title" name="title" type="text" required autocomplete="off" />
+	        
+	            					
+							            <label>
+							            Date<span class="req">*</span>
+							            </label>
+	              						<input id="date" name="date" type="date" required autocomplete="off"/>
+	            					
+	          					
+							            <label>
+							            Location<span class="req">*</span>
+							            </label>
+		            					<input id="location" name="locat" type="text" required autocomplete="off"/>
+	          					
+
+							            <label>
+							            Description <span class="req">*</span>
+							            </label>
+		            					<input id="description" name="descr" type="text" required autocomplete="off"/>
+	          					
+	          					
+							            <label>
+							            Image <span class="req">*</span>
+							            </label>
+							            <input id = "fileName" type="text" name="fileName" placeholder ="Desired name of the image..." required autocomplete="off"><br>
+		            					<input id="image" name="image" type="file" required autocomplete="off"/>
+	          					
+	          							<br/>
+	          							<br/>
+	          							<br/>
+
+	          							
+	          							<input id="sub" type="button" value="Submit" class="button button-block" onclick="send()"/>
+	          							
+	          					</div>
+          					</form>
+          					
+          					<p id = "result"></p>
+          					
+          					<label style="background: #ffddb3"><a href="/admin_area">Back to Managing Area</a></label>
+          					
+  			</div>
+  	</div>
+  	<div id="pageFooter" class="container">
+  	<p>&copy; Untitled. | Lorus iptem | Rutrum fermentum 2017.</p>
+    <ul class="contact">
+      <li><a href="#"><i class="material-icons md-36 md-white">mail</i></a></li>
+	      <li><a href="#"><i class="material-icons md-36 md-white">phone</i></a></li>
+	      <li><a href="#"><i class="material-icons md-36 md-white">location_on</i></a></li>
+    </ul>
+</div>
+</body>
+<script type="text/javascript">
+      
+
+    function send() {
+       
+     
+        
+        if(document.getElementById("title").value == "" || document.getElementById("date").value == "" || document.getElementById("location").value == ""|| document.getElementById("description").value == "" || document.getElementById("fileName").value == "" || document.getElementById("image").value == "" ){
+            document.getElementById("result").innerHTML = "fields cannot be empty"
+        }else{
+            
+            var image = document.getElementById("image").files[0];
+            var fileName = document.getElementById("fileName").value;
+            var title = document.getElementById("title").value;
+            var date = document.getElementById("date").value;
+            var locat = document.getElementById("location").value;
+            var descr = document.getElementById("description").value;
+            
+            var formdata = new FormData();
+            formdata.append('image', image);
+            formdata.append('fileName', fileName);
+            formdata.append('title', title);
+            formdata.append('date', date);
+            formdata.append('locat', locat);
+            formdata.append('descr', descr);
+            
+            var answer;
+            var http_request = new XMLHttpRequest();
+        
+            http_request.open("POST", "/insert_conference");
+            //http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            http_request.onload = function() {
+       
+                if (http_request.readyState == 4 && http_request.status == 200) {
+                    answer = http_request.responseText;
+                    
+                    document.getElementById("result").innerHTML = answer;
+                    }
+            };
+            
+            http_request.send(formdata);
+            
+            document.getElementById("fileName").value = "";
+            document.getElementById("title").value = "";
+            document.getElementById("location").value = "";
+            document.getElementById("description").value = "";
+            document.getElementById("image").value = "";
+        }
+    }
+    
+      
+  </script>
+</html>

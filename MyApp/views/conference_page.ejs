@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= title %></title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  	<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900|Quicksand:400,700" rel="stylesheet" />
+  
+</head>
+<style type="text/css">
+
+
+  input[type=text]{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    align: center;
+}
+
+
+input[type=submit] {
+    color: black;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: solid 2px #ccc;
+    cursor: pointer;
+    width: 50%;
+}
+
+.side-menu label {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    color: white;
+    text-align: left;
+}
+.conf-catalogue label{
+	width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    color: white;
+    text-align: right;
+}
+.side-menu a{
+	color: white;
+	text-decoration: none;
+}
+.column{
+	float: left;
+	padding: 10px;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.side-menu{
+	width: 20%;
+	background: #333333;
+	
+}
+.conf-catalogue{
+	background: #d9d9d9;
+	width: 75%;
+}
+.conf-catalogue ul{
+	margin: 5px;
+}
+.conf-catalogue li{
+	display: inline-block;
+	padding: 50px;
+
+}
+.conf-catalogue img{
+	width: 400px;
+	height: 200px;
+}
+.sign-up-form{
+  width: 50%;
+  margin: auto;
+}
+
+.field-wrapper {
+    padding: 16px;
+}
+
+.field-wrapper label{
+    color: black;
+    text-align: center;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.material-icons.md-48.md-light{ font-size: 48px; color: rgba(242, 242, 242, 0.26);}
+.material-icons.md-24.md-white{ font-size: 18px; color: #ffffff; }
+.material-icons.md-36.md-white{ font-size: 36px; color: #ffffff; }
+.material-icons.md-24.md-light{ font-size: 24px; color: rgba(0, 0, 0, 0.54); }
+</style>
+<body>
+
+	<div id="header-wrapper" style="background: url(/images/header.jpg)">
+  		<div id="header" class="container">
+  			   <div id="logo">
+      			<h1><a href="/">Manager-Online</a></h1>
+      		</div>
+  		</div>
+  	</div>
+
+  	<div id="page-wrapper" class="clearfix">	
+  			<div class="column side-menu">
+  				
+  					<i class="material-icons md-48 md-light">face</i>
+  				
+  				<label>
+  					<%= user.user_name + " " + user.user_surname %>
+  				</label>
+  				</br>
+  				</br>
+  				</br>
+  				</br>
+  				<label><i class="material-icons md-24 md-white">home</i> &nbsp <a href="/dashboard">Home Page</a></label>
+  				</br>
+  				</br>
+  				</br>
+  				</br>
+  				<label><i class="material-icons md-24 md-white">question_answer</i><a href="/your_registrations"> &nbsp My Registrations</a></label>
+  				<label><i class="material-icons md-24 md-white">arrow_back</i>&nbsp <a href="/logout">Log Out</a></label>
+  			</div>
+  			<div class="column conf-catalogue">
+  				<img src="/images/<%= conference.conference_pic %>.jpg">
+          <br/>
+          <h2><%= conference.conference_title %></h2>
+          <br/>
+          <h3>Location and date</h3>
+          <br/>
+          <p><%= conference.conference_location%> - <%= conference.conference_date %></p>
+          <br/>
+          <br/>
+          <h3>Description</h3>
+          <br/>
+          <%= conference.conference_desc %>
+          <br/>
+          <br/>
+          
+          <h3>Comments</h3>
+          <br/>
+          <%- comments %>
+
+          <div class="sign-up-form">
+
+            <form>
+                <div class="field-wrapper">
+
+                  Your Feedback <span class="req">*</span>
+                  </label>
+                  <input id="feedback" name="feedback" type="text"required autocomplete="off"/>
+                  <input id="sub" type="button" value="Submit" class="button button-block" onclick="send()"/>
+                  <br>
+                  <br>
+                  <p id = "result"></p>
+                </div>
+            </form>
+          </div>
+
+  			</div>
+  			
+  	</div>
+  	<div id="pageFooter" class="container">
+  		<p>&copy; Untitled. | Lorus iptem | Rutrum fermentum 2017.</p>
+    	<ul class="contact">
+	      <li><a href="#"><i class="material-icons md-36 md-white">mail</i></a></li>
+	      <li><a href="#"><i class="material-icons md-36 md-white">phone</i></a></li>
+	      <li><a href="#"><i class="material-icons md-36 md-white">location_on</i></a></li>
+	      
+    	</ul>
+
+	 </div>
+
+</body>
+
+<script type="text/javascript">
+      
+
+    function send() {
+       
+     
+        
+        if(document.getElementById("feedback").value == ""){
+            document.getElementById("result").innerHTML = "field cannot be empty"
+        }else{
+            
+            
+            var feedback = document.getElementById("feedback").value;
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; 
+            var yyyy = today.getFullYear();
+            var id = window.location.href.replace(/^.*\/\/[^\/]+\/[^\/]+\//, '');
+            if(dd<10) {
+                dd = '0'+dd
+            } 
+            
+            if(mm<10) {
+                mm = '0'+mm
+            } 
+            
+            today = mm + '/' + dd + '/' + yyyy;
+            
+            var formdata = new FormData();
+            formdata.append('feedback', feedback);
+            formdata.append('date', today);
+            formdata.append('conference', id);
+            
+            
+            var answer;
+            var http_request = new XMLHttpRequest();
+        
+            http_request.open("POST", "/insert_comment");
+            //http_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            http_request.onload = function() {
+       
+                if (http_request.readyState == 4 && http_request.status == 200) {
+                    answer = http_request.responseText;
+                    
+                    document.getElementById("result").innerHTML = answer;
+                    }
+            };
+            
+            http_request.send(formdata);
+            
+        }
+    }
+    
+      
+  </script>
+</html>
